@@ -1,0 +1,27 @@
+{
+  "name": "mocki",
+  "version": "1.0.0",
+  "description": "Autogenerate mocks",
+  "main": "index.js",
+  "repository": "https://github.com/x0s3/mocki",
+  "author": "x0s3",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest '\\.test\\.ts$'"
+  },
+  "dependencies": {
+    "chance": "^1.1.7"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/babel-types": "^7.0.9",
+    "@types/chance": "^1.1.2",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.5",
+    "babel-plugin-tester": "^10.1.0",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.3",
+    "typescript": "^4.3.4"
+  }
+}
