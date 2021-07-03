@@ -18,9 +18,7 @@ export default function (babel: Babel): MockiPlugin {
           // @ts-ignore
           const fileName = state.file.opts.filename;
 
-          if (isNotTS(fileName)) {
-            return;
-          }
+          if (isNotTS(fileName)) return;
 
           programPath.traverse({
             CallExpression(callPath) {
@@ -28,9 +26,8 @@ export default function (babel: Babel): MockiPlugin {
               if (callPath.node.callee.name !== mockiFnName) return;
 
               let mockedObject = null;
-              const [mockiArgs] = callPath.node?.arguments;
               const [typeParameters] = callPath.node.typeParameters?.params!;
-              // @ts-ignore
+              // @ts-ignore prop `typeName.name` exists
               const mockiGenericName = typeParameters.typeName.name;
 
               if (t.isTSTypeReference(typeParameters)) {
@@ -42,19 +39,23 @@ export default function (babel: Babel): MockiPlugin {
 
                     identifierPath.traverse({
                       TSPropertySignature(interfacePath) {
-                        const [contract] = interfacePath.container as object[];
-                        // @ts-ignore
-                        const attributeName = contract.key.name;
-                        const attributeValueType =
-                          // @ts-ignore
-                          contract.typeAnnotation.typeAnnotation;
+                        const contracts = interfacePath.container as object[];
 
-                        const a = t.isTSStringKeyword(attributeValueType);
+                        const props = contracts.map(
+                          // @ts-ignore
+                          ({ key, typeAnnotation }) => {
+                            const attributeName = key.name;
+                            const attributeValueType =
+                              typeAnnotation.typeAnnotation;
+                          }
+                        );
                       },
                     });
                   },
                 });
               }
+
+              const [mockiArgs] = callPath.node?.arguments;
 
               if (mockiArgs) {
                 // @ts-ignore prop `properties` exists
